@@ -8,7 +8,7 @@ function App() {
   const [editor, setEditor] = useState<EditorJS | null>();
 
   useEffect(() => {
-    const editor = new EditorJS({
+    const Editor = new EditorJS({
       holder: "editorjs",
 
       tools: {
@@ -22,12 +22,19 @@ function App() {
         },
       },
       onReady: () => {
-        setEditor(editor);
+        setEditor(Editor);
+
+        document
+          .getElementById("save")
+          ?.addEventListener("click", () =>
+            Editor.save().then((output) => console.log(output))
+          );
       },
       autofocus: true,
+
       onChange: (api, event) => {
-        editor.save()?.then((data) => {
-          console.log(data);
+        Editor.save()?.then((data) => {
+          console.log();
         });
 
         // console.log("Now I know that Editor's content changed!", event);
@@ -35,18 +42,18 @@ function App() {
     });
   }, []);
 
-  const onSave = () => {
-    console.log(editor);
-    editor
-      ?.save()
-      .then((outputData: any) => {
-        // const array = outputData.blocks;
-        console.log("Article data: ", outputData);
-      })
-      .catch((error: any) => {
-        console.log("Saving failed: ", error);
-      });
-  };
+  // const onSave = () => {
+  //   console.log(editor);
+  //   editor
+  //     ?.save()
+  //     .then((outputData: any) => {
+  //       // const array = outputData.blocks;
+  //       console.log("Article data: ", outputData);
+  //     })
+  //     .catch((error: any) => {
+  //       console.log("Saving failed: ", error);
+  //     });
+  // };
 
   return (
     <>
@@ -54,7 +61,7 @@ function App() {
         <div id="editorjs"></div>
       </Paper>
       <Typography align="center">
-        <Button variant="contained" color="success" onClick={onSave}>
+        <Button variant="contained" color="success" id="save">
           Submit
         </Button>
       </Typography>
